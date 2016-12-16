@@ -1,9 +1,14 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input } from '@angular/core';
 
 @Component({
     selector: 'node',
     template: `
-        <div class="node-box">Component</div>
+        <template 
+            node-placement
+            [level]="level"
+        >
+            <div class="node-box">Component</div>
+        </template>
         <node
             *ngIf="level > 0"
             [level]="level - 1"
@@ -22,4 +27,7 @@ import { Component, Input } from '@angular/core';
 })
 export class NodeComponent {
     @Input() level: number = 0;
+
+    constructor(public elementRef: ElementRef) {
+    }
 }
