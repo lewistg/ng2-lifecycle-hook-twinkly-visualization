@@ -1,8 +1,12 @@
-import { Component, ElementRef, Input } from '@angular/core';
+import { Component, ElementRef, Host, Input, Optional, SkipSelf } from '@angular/core';
 
 @Component({
     selector: 'node',
     template: `
+        <connector
+           [parentNode]="parentNode && parentNode.elementRef"
+           [childNode]="elementRef"
+        ></connector>
         <template 
             node-placement
             [level]="level"
@@ -10,6 +14,12 @@ import { Component, ElementRef, Input } from '@angular/core';
             <div class="node-box">Component</div>
         </template>
         <node
+            #childA
+            *ngIf="level > 0"
+            [level]="level - 1"
+        ></node>
+        <node
+            #childB
             *ngIf="level > 0"
             [level]="level - 1"
         ></node>
@@ -28,6 +38,5 @@ import { Component, ElementRef, Input } from '@angular/core';
 export class NodeComponent {
     @Input() level: number = 0;
 
-    constructor(public elementRef: ElementRef) {
-    }
+    constructor(public elementRef: ElementRef, @Optional() @SkipSelf() public parentNode: NodeComponent) {}
 }
