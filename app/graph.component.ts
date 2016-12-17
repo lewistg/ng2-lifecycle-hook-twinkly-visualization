@@ -1,17 +1,21 @@
 import { AfterViewInit, Component, ElementRef, Input, QueryList, TemplateRef, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
 
 import { NodeComponent } from './componentnode.component';
+import { DOMLineSegment, getClientRectLocation } from './domgeometry';
 
 @Component({
     selector: 'graph',
     template: `
-        <div>Graph</div>
         <div class="levels">
             <div class="level" *ngFor="let level of levels; let i = index">
                 <div #levelAnchor></div>
             </div>
         </div>
         <node #rootNode [level]="numLevels - 1"></node>
+        <connector
+            *ngFor="let connector of connections"
+            [domLineSegment]="connector"
+        ></connector>
     `,
     styles: [`
         .levels {
@@ -26,8 +30,8 @@ import { NodeComponent } from './componentnode.component';
     `]
 })
 export class GraphComponent implements AfterViewInit {
-    levelTemplates: TemplateRef<any>[][] = [];
     @ViewChildren('levelAnchor', {read: ViewContainerRef}) levelViewContainers: QueryList<ViewContainerRef>;
+    @ViewChildren('compDiv') componentDivs: QueryList<ElementRef>;
     @ViewChild('rootNode') rootNode: NodeComponent;
 
     levels: any[];
@@ -38,20 +42,47 @@ export class GraphComponent implements AfterViewInit {
         return this.levels.length;
     }
 
-    appendNodeToLevel(nodeTemplate: TemplateRef<any>, levelIndex: number) {
-        this.levelTemplates[levelIndex].push(nodeTemplate);
+    connections: DOMLineSegment[] = [];
+
+    private _connectionsInitialized = false;
+
+    private _tickThenInitializeConnections() {
+        setTimeout(() => {
+            this.connections = [];
+            let calculateSubgraphConnections = (subgraphRoot: NodeComponent) => {
+                let p0 = getClientRectLocation(subgraphRoot.componentDiv.nativeElement, 0.5, 1);
+                subgraphRoot.childNodes.forEach((child: NodeComponent) => {
+                    let p1 = getClientRectLocation(child.componentDiv.nativeElement, 0.5, 0);
+                    this.connections.push(new DOMLineSegment(p0, p1));
+
+                    calculateSubgraphConnections(child);
+                })
+            }
+            calculateSubgraphConnections(this.rootNode);
+
+            this._connectionsInitialized = true;
+        }, 0)
+    }
+
+    private _tickThenBuildNodes() {
+        setTimeout(() => {
+            let levelViewContainers = this.levelViewContainers.toArray();
+            let renderSubgraph = (subgraphRoot: NodeComponent) => {
+                let vc = levelViewContainers[subgraphRoot.level];
+                vc.createEmbeddedView(subgraphRoot.componentDivTemplate);
+                subgraphRoot.childNodes.forEach(renderSubgraph);
+            }
+            renderSubgraph(this.rootNode);
+        }, 0)
     }
 
     ngAfterViewInit() {
-        let levelViewContainers = this.levelViewContainers.toArray();
-        let renderSubgraph = (node: NodeComponent) => {
-            let vc = levelViewContainers[node.level];
-            vc.createEmbeddedView(node.componentDivTemplate);
-            node.childNodes.forEach(renderSubgraph);
-        }
-        renderSubgraph(this.rootNode);
+        this._tickThenBuildNodes();
+    }
 
-        // draw connectors
-        console.log('here!');
+    ngAfterViewChecked() {
+        if (!this._connectionsInitialized && !!this.rootNode.componentDiv) {
+            this._tickThenInitializeConnections();
+        }
     }
 }
