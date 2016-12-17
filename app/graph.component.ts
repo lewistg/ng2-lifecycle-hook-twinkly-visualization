@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, QueryList, TemplateRef, ViewChildren, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, QueryList, TemplateRef, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
 
 import { NodeComponent } from './componentnode.component';
 
@@ -7,11 +7,11 @@ import { NodeComponent } from './componentnode.component';
     template: `
         <div>Graph</div>
         <div class="levels">
-            <div class="level" *ngFor="let level of levelTemplates; let i = index">
+            <div class="level" *ngFor="let level of levels; let i = index">
                 <div #levelAnchor></div>
             </div>
         </div>
-        <node [level]="numLevels - 1"></node>
+        <node #rootNode [level]="numLevels - 1"></node>
     `,
     styles: [`
         .levels {
@@ -28,15 +28,14 @@ import { NodeComponent } from './componentnode.component';
 export class GraphComponent implements AfterViewInit {
     levelTemplates: TemplateRef<any>[][] = [];
     @ViewChildren('levelAnchor', {read: ViewContainerRef}) levelViewContainers: QueryList<ViewContainerRef>;
+    @ViewChild('rootNode') rootNode: NodeComponent;
 
+    levels: any[];
     @Input() set numLevels(value: number) {
-        this.levelTemplates = [];
-        for (let i = 0; i < value; i++) {
-            this.levelTemplates[i] = [];
-        }
+        this.levels = new Array(value);
     }
-    get numLevels() {
-        return (this.levelTemplates && this.levelTemplates.length) || 0;
+    get numLevels(): number {
+        return this.levels.length;
     }
 
     appendNodeToLevel(nodeTemplate: TemplateRef<any>, levelIndex: number) {
@@ -45,11 +44,14 @@ export class GraphComponent implements AfterViewInit {
 
     ngAfterViewInit() {
         let levelViewContainers = this.levelViewContainers.toArray();
-        for (let i = 0; i < this.numLevels; i++) {
-            let vc = levelViewContainers[i];
-            this.levelTemplates[i].forEach((t: TemplateRef<any>) => vc.createEmbeddedView(t));
+        let renderSubgraph = (node: NodeComponent) => {
+            let vc = levelViewContainers[node.level];
+            vc.createEmbeddedView(node.componentDivTemplate);
+            node.childNodes.forEach(renderSubgraph);
         }
+        renderSubgraph(this.rootNode);
 
         // draw connectors
+        console.log('here!');
     }
 }

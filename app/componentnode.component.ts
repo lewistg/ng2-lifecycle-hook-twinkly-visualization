@@ -1,17 +1,16 @@
-import { Component, ElementRef, Host, Input, Optional, SkipSelf } from '@angular/core';
+import { Component, ElementRef, Host, Input, Optional, QueryList, SkipSelf, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 
 @Component({
     selector: 'node',
     template: `
-        <connector
-           [parentNode]="parentNode && parentNode.elementRef"
-           [childNode]="elementRef"
-        ></connector>
+        <!--connector
+           [parentNode]="parentNode && parentNode.componentDiv"
+           [childNode]="componentDiv"
+        ></connector-->
         <template 
-            node-placement
-            [level]="level"
+            #compTemplate
         >
-            <div class="node-box">Component</div>
+            <div #compDiv class="node-box">Component</div>
         </template>
         <node
             #childA
@@ -37,6 +36,14 @@ import { Component, ElementRef, Host, Input, Optional, SkipSelf } from '@angular
 })
 export class NodeComponent {
     @Input() level: number = 0;
+    @ViewChild('compDiv') componentDiv: ElementRef;
+    @ViewChild('compTemplate') componentDivTemplate: TemplateRef<any>;
+    @ViewChildren(NodeComponent) childNodes: QueryList<NodeComponent>;
 
-    constructor(public elementRef: ElementRef, @Optional() @SkipSelf() public parentNode: NodeComponent) {}
+    constructor(@Optional() @SkipSelf() public parentNode: NodeComponent) {}
+
+    /*ngAfterViewChecked() {
+        console.log('template ref', this.componentDivTemplate);
+        console.log('compDiv', this.componentDiv);
+    }*/
 }
