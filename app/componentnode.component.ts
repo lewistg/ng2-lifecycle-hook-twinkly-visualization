@@ -8,24 +8,31 @@ import { Component, ElementRef, Host, Input, Optional, QueryList, SkipSelf, Temp
         >
             <div 
                 #compDiv 
+                class="node-box"
                 [style.margin-left.px]="padding"
                 [style.margin-right.px]="padding"
-                class="node-box"
-            >C</div>
+                (click)="boundData = !boundData"
+            >
+                C
+                <canvas #flashCanvas width="40" height="40"></canvas>
+            </div>
         </template>
         <node
             #childA
             *ngIf="level > 0"
             [level]="level - 1"
+            [boundData]="boundData"
         ></node>
         <node
             #childB
             *ngIf="level > 0"
             [level]="level - 1"
+            [boundData]="boundData"
         ></node>
     `,
     styles: [`
         .node-box {
+            position: relative;
             display: flex;
             justify-content: center;
             alignt-items: center;
@@ -38,13 +45,21 @@ import { Component, ElementRef, Host, Input, Optional, QueryList, SkipSelf, Temp
             width: 15px;
             height: 15px;
         }
+
+        .node-box canvas {
+            position: absolute;
+            left: -10px;
+            top: -10px;
+        }
     `]
 })
 export class NodeComponent {
     private static BASE_PADDING = 5;
     @Input() level: number = 0;
+    @Input() boundData: boolean = true;
     @ViewChild('compDiv') componentDiv: ElementRef;
     @ViewChild('compTemplate') componentDivTemplate: TemplateRef<any>;
+    @ViewChild('flashCanvas') elementRef: ElementRef;
     @ViewChildren(NodeComponent) childNodes: QueryList<NodeComponent>;
 
     get padding(): number {
@@ -53,6 +68,10 @@ export class NodeComponent {
     }
 
     constructor(@Optional() @SkipSelf() public parentNode: NodeComponent) {}
+    
+    ngOnChanges() {
+        console.log(`node in level ${this.level} changed`);
+    }
 
     ngAfterViewChecked() {
         //console.log('template ref', this.componentDivTemplate);

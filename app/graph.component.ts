@@ -11,7 +11,11 @@ import { DOMLineSegment, getClientRectLocation } from './domgeometry';
                 <div #levelAnchor></div>
             </div>
         </div>
-        <node #rootNode [level]="numLevels - 1"></node>
+        <node 
+            #rootNode 
+            [level]="numLevels - 1"
+            [boundData]="false"
+        ></node>
         <connector
             *ngFor="let connector of connections"
             [domLineSegment]="connector"
