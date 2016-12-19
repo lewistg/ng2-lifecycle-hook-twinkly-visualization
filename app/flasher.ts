@@ -14,6 +14,7 @@ export class Flasher {
     private _context: CanvasRenderingContext2D;
     private _flashes: Flash[] = [];
     private _prevTime: number|undefined;
+    private _animationCallbackId: number|undefined;
 
     constructor(private _canvas: HTMLCanvasElement) {
         this._context = <CanvasRenderingContext2D> this._canvas.getContext('2d');
@@ -30,15 +31,38 @@ export class Flasher {
         }
     }
 
-    private _step() {
-        let currTime = Date.now();
-        let timeDelta = (this._prevTime === undefined ? 0 : currTime - this._prevTime);
+    flashAndPause(color: Color) {
+        cancelAnimationFrame(this._animationCallbackId);
 
+        this._flashes.push({
+            color: color,
+            lifeSpan: undefined
+        })
+        this._draw();
+    }
+
+    unpause() {
+        this._step();
+    }
+
+    private _draw() {
         this._context.clearRect(
             0,
             0,
             this._canvas.width,
             this._canvas.height);
+
+        this._flashes.forEach((flash) => {
+            let opacity = 1 - ((flash.lifeSpan || 0) / Flasher.FLASH_LIFESPAN);
+            this._context.fillStyle =
+                `rgba(${flash.color.r}, ${flash.color.g}, ${flash.color.b}, ${opacity})`
+            this._context.fillRect(0, 0, this._canvas.width, this._canvas.height);
+        });
+    }
+
+    private _step() {
+        let currTime = Date.now();
+        let timeDelta = (this._prevTime === undefined ? 0 : currTime - this._prevTime);
 
         let unexpiredFlashes: Flash[] = [];
         this._flashes.forEach((flash) => {
@@ -52,16 +76,14 @@ export class Flasher {
                 return;
             }
 
-            this._context.fillStyle =
-                `rgba(${flash.color.r}, ${flash.color.g}, ${flash.color.b}, ${1 - (flash.lifeSpan) / Flasher.FLASH_LIFESPAN})`
-            this._context.fillRect(0, 0, this._canvas.width, this._canvas.height);
-
             unexpiredFlashes.push(flash);
         });
-
         this._flashes = unexpiredFlashes;
+
+        this._draw();
+
         if (this._flashes.length > 0) {
-            requestAnimationFrame(() => this._step());
+            this._animationCallbackId = requestAnimationFrame(() => this._step());
             this._prevTime = currTime;
         } else {
             this._prevTime = undefined;

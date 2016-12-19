@@ -84,6 +84,18 @@ export class NodeComponent {
         }
     }
 
+    holdFlash(color: Color) {
+        if (!!this._callbackFlasher) {
+            this._callbackFlasher.flashAndPause(color);
+        }
+    }
+
+    releaseFlash() {
+        if (!!this._callbackFlasher) {
+            this._callbackFlasher.unpause();
+        }
+    }
+
     ngOnChanges() {
         this._logger.log({node: this, lifecycleHook: LifecycleHook.NG_ON_CHANGES });
     }

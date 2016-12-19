@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ComponentNodeLifecycleLog } from './componentnodelifecyclehooklog';
+import { LogEntry, ComponentNodeLifecycleLog } from './componentnodelifecyclehooklog';
 
 @Component({
     selector: 'log-controls',
@@ -8,7 +8,7 @@ import { ComponentNodeLifecycleLog } from './componentnodelifecyclehooklog';
         <div class="controls">
             <div 
                 class="button record"
-                (click)="logger.clear(); logger.record = !logger.record"
+                (click)="onClickRecord()"
                 [class.recording]="logger.record"
                 tabindex="-1"
             >⚫</div>
@@ -16,18 +16,22 @@ import { ComponentNodeLifecycleLog } from './componentnodelifecyclehooklog';
             <div 
                 class="button"
                 tabindex="-1"
+                (click)="step(-1)"
             >⏮</div>
             <div 
                 class="button play"
+                (click)="onClickPlay()"
                 tabindex="-1"
             >▶</div>
             <div 
                 class="button"
                 tabindex="-1"
+                (click)="onClickStop()"
             >■</div>
             <div 
                 class="button"
                 tabindex="-1"
+                (click)="step(1)"
             >⏭</div>
         </div>
     `,
@@ -72,6 +76,52 @@ import { ComponentNodeLifecycleLog } from './componentnodelifecyclehooklog';
     `]
 })
 export class LogControlsComponent { 
-    constructor(public logger: ComponentNodeLifecycleLog) {
+    private _currLogEntry: LogEntry|undefined;
+    private _currLogEntryIndex: number = -1;
+    
+    constructor(public logger: ComponentNodeLifecycleLog) { }
+
+    onClickRecord() {
+        this.logger.record = !this.logger.record
+        if (this.logger.record) {
+            this.logger.clear(); 
+        }
+    }
+
+    onClickPlay() {
+        this.logger.record = false;
+        this.logger.livePlayback = false;
+        this.step(1); // take the first step
+    }
+
+    step(offset: number) {
+        if (this.logger.length == 0) {
+            this._stopStepping();
+            return;
+        }
+
+        if (this._currLogEntry) {
+            this._currLogEntry.node.releaseFlash();
+        }
+
+        this._currLogEntryIndex += offset;
+        this._currLogEntryIndex = Math.min(Math.max(0, this._currLogEntryIndex), this.logger.length - 1);
+
+        let entry = this.logger.get(this._currLogEntryIndex);
+        entry.node.holdFlash(ComponentNodeLifecycleLog.LIFECYCLE_HOOK_COLORS.get(entry.lifecycleHook));
+        this._currLogEntry = entry;
+    }
+
+    private _stopStepping() {
+        this._currLogEntry = undefined;
+        this._currLogEntryIndex = -1;
+        if (this._currLogEntry) {
+            this._currLogEntry.node.releaseFlash();
+        }
+    }
+
+    onClickStop() {
+        this.logger.livePlayback = true;
+        this._stopStepping();
     }
 }
