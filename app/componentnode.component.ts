@@ -1,5 +1,7 @@
 import { Component, ElementRef, Host, Input, Optional, QueryList, SkipSelf, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 
+import {Flasher} from './flasher';
+
 @Component({
     selector: 'node',
     template: `
@@ -34,6 +36,7 @@ import { Component, ElementRef, Host, Input, Optional, QueryList, SkipSelf, Temp
         .node-box {
             position: relative;
             display: flex;
+            overflow: hidden;
             justify-content: center;
             alignt-items: center;
             font-family: sans-serif;
@@ -54,13 +57,18 @@ import { Component, ElementRef, Host, Input, Optional, QueryList, SkipSelf, Temp
     `]
 })
 export class NodeComponent {
+    private static CALLBACK_FLASH_COLORS = {
+        ngOnChanges: {r: 153, g: 255, b: 0}
+    }
     private static BASE_PADDING = 5;
+
     @Input() level: number = 0;
     @Input() boundData: boolean = true;
     @ViewChild('compDiv') componentDiv: ElementRef;
     @ViewChild('compTemplate') componentDivTemplate: TemplateRef<any>;
-    @ViewChild('flashCanvas') elementRef: ElementRef;
+    @ViewChild('flashCanvas') flashCanvas: ElementRef;
     @ViewChildren(NodeComponent) childNodes: QueryList<NodeComponent>;
+    private _callbackFlasher: Flasher;
 
     get padding(): number {
         let scalar = Math.pow((this.level + 1), 2);
@@ -71,9 +79,15 @@ export class NodeComponent {
     
     ngOnChanges() {
         console.log(`node in level ${this.level} changed`);
+        if (!!this._callbackFlasher) {
+            this._callbackFlasher.flash(NodeComponent.CALLBACK_FLASH_COLORS.ngOnChanges);
+        }
     }
 
     ngAfterViewChecked() {
+        if (!this._callbackFlasher && !!this.flashCanvas) {
+            this._callbackFlasher = new Flasher(this.flashCanvas.nativeElement);
+        }
         //console.log('template ref', this.componentDivTemplate);
         //console.log('compDiv', this.componentDiv);
     }

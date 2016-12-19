@@ -10,9 +10,9 @@ interface Flash {
 }
 
 export class Flasher {
-    private static readonly FLASH_LIFESPAN = 1000;
+    private static readonly FLASH_LIFESPAN = 1000.0;
     private _context: CanvasRenderingContext2D;
-    private _flashes: Flash[];
+    private _flashes: Flash[] = [];
     private _prevTime: number|undefined;
 
     constructor(private _canvas: HTMLCanvasElement) {
@@ -51,6 +51,10 @@ export class Flasher {
             if (flash.lifeSpan > Flasher.FLASH_LIFESPAN) {
                 return;
             }
+
+            this._context.fillStyle =
+                `rgba(${flash.color.r}, ${flash.color.g}, ${flash.color.b}, ${1 - (flash.lifeSpan) / Flasher.FLASH_LIFESPAN})`
+            this._context.fillRect(0, 0, this._canvas.width, this._canvas.height);
 
             unexpiredFlashes.push(flash);
         });
