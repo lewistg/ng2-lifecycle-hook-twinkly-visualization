@@ -13,27 +13,37 @@ import {
 } from '@angular/core';
 
 import { NodeComponent } from './componentnode.component';
-import { DOMLineSegment, getClientRectLocation } from './domgeometry';
+import { DOMLineSegment, getClientRectLocation, subtract as subDOMLocations } from './domgeometry';
 
 @Component({
     selector: 'graph',
     template: `
-        <div class="levels">
-            <div class="level" *ngFor="let level of levels; let i = index">
-                <div #levelAnchor></div>
+        <div class="wrapper">
+            <div class="levels">
+                <div class="level" *ngFor="let level of levels; let i = index">
+                    <div #levelAnchor></div>
+                </div>
             </div>
+            <node 
+                #rootNode 
+                [level]="numLevels - 1"
+                [boundData]="false"
+            ></node>
+            <connector
+                *ngFor="let connector of connections"
+                [domLineSegment]="connector"
+            ></connector>
         </div>
-        <node 
-            #rootNode 
-            [level]="numLevels - 1"
-            [boundData]="false"
-        ></node>
-        <connector
-            *ngFor="let connector of connections"
-            [domLineSegment]="connector"
-        ></connector>
     `,
     styles: [`
+        :host {
+            display: flex;
+        }
+        .wrapper {
+            flex-shrink: 0;
+            position: relative;
+            width: 800px;
+        }
         .levels {
             display: flex;
             flex-direction: column-reverse;
@@ -63,15 +73,19 @@ export class GraphComponent implements AfterViewInit {
 
     private _connectionsInitialized = false;
 
-    constructor(private _cdr: ChangeDetectorRef) { } 
+    constructor(private _cdr: ChangeDetectorRef, private _elementRef: ElementRef) { } 
 
     private _tickThenInitializeConnections() {
+        let hostRect = this._elementRef.nativeElement.getBoundingClientRect();
+
         setTimeout(() => {
             this.connections = [];
             let calculateSubgraphConnections = (subgraphRoot: NodeComponent) => {
                 let p0 = getClientRectLocation(subgraphRoot.componentDiv.nativeElement, 0.5, 1);
+                p0 = subDOMLocations(p0, hostRect);
                 subgraphRoot.childNodes.forEach((child: NodeComponent) => {
                     let p1 = getClientRectLocation(child.componentDiv.nativeElement, 0.5, 0);
+                    p1 = subDOMLocations(p1, hostRect);
                     this.connections.push(new DOMLineSegment(p0, p1));
 
                     calculateSubgraphConnections(child);

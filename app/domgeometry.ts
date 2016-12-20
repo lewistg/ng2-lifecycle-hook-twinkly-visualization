@@ -3,6 +3,13 @@ export interface DOMLocation {
     left: number
 }
 
+export function subtract(p0: DOMLocation, p1: DOMLocation) {
+    return {
+        top: p0.top - p1.top,
+        left: p0.left - p1.left
+    };
+}
+
 export class DOMLineSegment {
     get width() {
         return Math.abs(this.p0.left - this.p1.left);

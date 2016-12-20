@@ -22,7 +22,7 @@ import { DOMLineSegment, DOMLocation } from './domgeometry';
     `,
     styles: [`
         svg {
-            position: fixed;
+            position: absolute;
         }
     `]
 })
