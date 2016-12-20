@@ -2,6 +2,8 @@ import { NodeComponent } from './componentnode.component';
 
 export enum LifecycleHook {
     NG_ON_CHANGES,
+    NG_DO_CHECK,
+    NG_AFTER_VIEW_CHECKED,
 }
 
 export interface LogEntry {
@@ -10,7 +12,11 @@ export interface LogEntry {
 }
 
 export class ComponentNodeLifecycleLog {
-    static LIFECYCLE_HOOK_COLORS = new Map([[LifecycleHook.NG_ON_CHANGES, {r: 153, g: 255, b: 0}]])
+    static LIFECYCLE_HOOK_COLORS = new Map([
+        [LifecycleHook.NG_ON_CHANGES, {r: 153, g: 255, b: 0}],
+        [LifecycleHook.NG_DO_CHECK, {r: 77, g: 77, b: 255}],
+        [LifecycleHook.NG_AFTER_VIEW_CHECKED, {r: 221, g: 0, b: 72}],
+    ])
     livePlayback: boolean = true;
     record: boolean = false;
     private _entries: LogEntry[] = [];

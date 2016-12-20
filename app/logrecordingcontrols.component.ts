@@ -5,6 +5,14 @@ import { LogEntry, ComponentNodeLifecycleLog } from './componentnodelifecyclehoo
 @Component({
     selector: 'log-controls',
     template: `
+        <div class="step-indicator">
+            <div class="track">
+                 <div 
+                    [ngStyle]="{ 'left': indicatorLeftOffsetStyle}"
+                    class="indicator"
+                ></div>
+            </div>
+        </div>
         <div class="controls">
             <div 
                 class="button record"
@@ -57,6 +65,7 @@ import { LogEntry, ComponentNodeLifecycleLog } from './componentnodelifecyclehoo
             height: 36px;
             cursor: pointer;
             box-sizing: border-box;
+            user-select: none;
         }
         .button:active {
             background-color: #979797;
@@ -82,6 +91,25 @@ import { LogEntry, ComponentNodeLifecycleLog } from './componentnodelifecyclehoo
             border-right: solid 2px black;
 
         }
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 9px;
+        }
+        .track {
+            width: 300px;
+            height: 5px;
+            background-color: #e7e7e7;
+            display: flex;
+            align-items: center;
+        }
+        .indicator {
+            width: 12px;
+            height: 12px;
+            background-color: black;
+            border-radius: 12px;
+            position: relative;
+        }
     `]
 })
 export class LogControlsComponent { 
@@ -106,11 +134,11 @@ export class LogControlsComponent {
     }
 
     get canPlay(): boolean {
-        return this.logger.length > 0
+        return this.logger.length > 0 && !this.isRecording;
     }
 
     get canStepForwards(): boolean {
-        return  this.isPlaying && this._currLogEntryIndex < this.logger.length;
+        return  this.isPlaying && this._currLogEntryIndex < this.logger.length - 1;
     }
 
     get canStepBackwards(): boolean {
@@ -119,6 +147,19 @@ export class LogControlsComponent {
 
     get isPlaying(): boolean {
         return !!this._currLogEntry;
+    }
+
+    get isRecording(): boolean {
+        return this.logger.record;
+    }
+
+    get indicatorLeftOffsetStyle(): string {
+        //return `calc(${this.percentThroughSteps} - 6px)`
+        return `calc(${this.percentThroughSteps * 100}% - 6px)`
+    }
+
+    private get percentThroughSteps(): number {
+        return (this._currLogEntryIndex + 1) / this.logger.length;
     }
 
     step(offset: number) {

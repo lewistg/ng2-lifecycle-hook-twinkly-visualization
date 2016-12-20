@@ -1,4 +1,17 @@
-import { Component, ElementRef, Host, Input, Optional, QueryList, SkipSelf, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import {
+    ChangeDetectorRef,
+    ChangeDetectionStrategy,
+    Component,
+    ElementRef,
+    Host,
+    Input,
+    Optional,
+    QueryList,
+    SkipSelf,
+    TemplateRef,
+    ViewChild,
+    ViewChildren
+} from '@angular/core';
 
 import { Flasher, Color } from './flasher';
 import { LifecycleHook, ComponentNodeLifecycleLog } from './componentnodelifecyclehooklog';
@@ -6,11 +19,11 @@ import { LifecycleHook, ComponentNodeLifecycleLog } from './componentnodelifecyc
 @Component({
     selector: 'node',
     template: `
-        <template 
+        <template
             #compTemplate
         >
-            <div 
-                #compDiv 
+            <div
+                #compDiv
                 class="node-box"
                 [style.margin-left.px]="padding"
                 [style.margin-right.px]="padding"
@@ -57,13 +70,23 @@ import { LifecycleHook, ComponentNodeLifecycleLog } from './componentnodelifecyc
             top: -10px;
             z-index: -1;
         }
-    `]
+    `],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NodeComponent {
     private static BASE_PADDING = 5;
 
     @Input() level: number = 0;
-    @Input() boundData: boolean = true;
+    private _boundData: boolean = true;
+    @Input() set boundData(value: boolean) {
+        this._boundData = value;
+        this.cdr.markForCheck();
+    }
+    get boundData(): boolean {
+        return this._boundData;
+    }
+
+
     @ViewChild('compDiv') componentDiv: ElementRef;
     @ViewChild('compTemplate') componentDivTemplate: TemplateRef<any>;
     @ViewChild('flashCanvas') flashCanvas: ElementRef;
@@ -76,7 +99,11 @@ export class NodeComponent {
     }
 
     // TODO: Remove parent node (?)
-    constructor(private _logger: ComponentNodeLifecycleLog, @Optional() @SkipSelf() public parentNode: NodeComponent) {}
+    constructor(
+        public cdr: ChangeDetectorRef,
+        private _logger: ComponentNodeLifecycleLog,
+        @Optional() @SkipSelf() public parentNode: NodeComponent
+    ) {}
 
     flash(color: Color) {
         if (!!this._callbackFlasher) {
@@ -100,9 +127,15 @@ export class NodeComponent {
         this._logger.log({node: this, lifecycleHook: LifecycleHook.NG_ON_CHANGES });
     }
 
+    ngDoCheck() {
+        this._logger.log({node: this, lifecycleHook: LifecycleHook.NG_DO_CHECK});
+    }
+
     ngAfterViewChecked() {
         if (!this._callbackFlasher && !!this.flashCanvas) {
             this._callbackFlasher = new Flasher(this.flashCanvas.nativeElement);
+        } else {
+            this._logger.log({node: this, lifecycleHook: LifecycleHook.NG_AFTER_VIEW_CHECKED});
         }
     }
 }

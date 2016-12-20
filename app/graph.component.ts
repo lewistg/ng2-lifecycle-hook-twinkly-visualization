@@ -1,4 +1,16 @@
-import { AfterViewInit, Component, ElementRef, Input, QueryList, TemplateRef, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
+import { 
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    Input,
+    QueryList,
+    TemplateRef,
+    ViewChild,
+    ViewChildren,
+    ViewContainerRef 
+} from '@angular/core';
 
 import { NodeComponent } from './componentnode.component';
 import { DOMLineSegment, getClientRectLocation } from './domgeometry';
@@ -31,7 +43,8 @@ import { DOMLineSegment, getClientRectLocation } from './domgeometry';
             justify-content: center;
             margin-bottom: 15px;
         }
-    `]
+    `],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GraphComponent implements AfterViewInit {
     @ViewChildren('levelAnchor', {read: ViewContainerRef}) levelViewContainers: QueryList<ViewContainerRef>;
@@ -50,6 +63,8 @@ export class GraphComponent implements AfterViewInit {
 
     private _connectionsInitialized = false;
 
+    constructor(private _cdr: ChangeDetectorRef) { } 
+
     private _tickThenInitializeConnections() {
         setTimeout(() => {
             this.connections = [];
@@ -64,6 +79,8 @@ export class GraphComponent implements AfterViewInit {
             }
             calculateSubgraphConnections(this.rootNode);
 
+            this._cdr.markForCheck();
+
             this._connectionsInitialized = true;
         }, 0)
     }
@@ -74,6 +91,7 @@ export class GraphComponent implements AfterViewInit {
             let renderSubgraph = (subgraphRoot: NodeComponent) => {
                 let vc = levelViewContainers[subgraphRoot.level];
                 vc.createEmbeddedView(subgraphRoot.componentDivTemplate);
+                subgraphRoot.cdr.markForCheck();
                 subgraphRoot.childNodes.forEach(renderSubgraph);
             }
             renderSubgraph(this.rootNode);
