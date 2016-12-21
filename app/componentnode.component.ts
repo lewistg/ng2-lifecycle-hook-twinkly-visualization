@@ -5,9 +5,7 @@ import {
     ElementRef,
     Host,
     Input,
-    Optional,
     QueryList,
-    SkipSelf,
     TemplateRef,
     ViewChild,
     ViewChildren
@@ -98,11 +96,9 @@ export class NodeComponent {
         return scalar * NodeComponent.BASE_PADDING;
     }
 
-    // TODO: Remove parent node (?)
     constructor(
         public cdr: ChangeDetectorRef,
         private _logger: ComponentNodeLifecycleLog,
-        @Optional() @SkipSelf() public parentNode: NodeComponent
     ) {}
 
     flash(color: Color) {
@@ -124,7 +120,7 @@ export class NodeComponent {
     }
 
     ngOnChanges() {
-        this._logger.log({node: this, lifecycleHook: LifecycleHook.NG_ON_CHANGES });
+        this._logger.log({node: this, lifecycleHook: LifecycleHook.NG_ON_CHANGES});
     }
 
     ngDoCheck() {
