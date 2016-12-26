@@ -5,6 +5,7 @@ import {
     ElementRef,
     Host,
     Input,
+    NgZone,
     QueryList,
     TemplateRef,
     ViewChild,
@@ -69,7 +70,7 @@ import { LifecycleHook, ComponentNodeLifecycleLog } from './componentnodelifecyc
             z-index: -1;
         }
     `],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    /* changeDetection: ChangeDetectionStrategy.OnPush */
 })
 export class NodeComponent {
     private static BASE_PADDING = 5;
@@ -78,7 +79,7 @@ export class NodeComponent {
     private _boundData: boolean = true;
     @Input() set boundData(value: boolean) {
         this._boundData = value;
-        this.cdr.markForCheck();
+        /* this.cdr.markForCheck(); */
     }
     get boundData(): boolean {
         return this._boundData;
@@ -97,25 +98,26 @@ export class NodeComponent {
     }
 
     constructor(
-        public cdr: ChangeDetectorRef,
+        /* public cdr: ChangeDetectorRef, */
         private _logger: ComponentNodeLifecycleLog,
+        private _ngZone: NgZone
     ) {}
 
     flash(color: Color) {
         if (!!this._callbackFlasher) {
-            this._callbackFlasher.flash(color);
+            this._ngZone.runOutsideAngular(() => this._callbackFlasher.flash(color));
         }
     }
 
     holdFlash(color: Color) {
         if (!!this._callbackFlasher) {
-            this._callbackFlasher.flashAndPause(color);
+            this._ngZone.runOutsideAngular(() => this._callbackFlasher.flashAndPause(color));
         }
     }
 
     releaseFlash() {
         if (!!this._callbackFlasher) {
-            this._callbackFlasher.unpause();
+            this._ngZone.runOutsideAngular(() => this._callbackFlasher.unpause());
         }
     }
 
@@ -123,9 +125,9 @@ export class NodeComponent {
         this._logger.log({node: this, lifecycleHook: LifecycleHook.NG_ON_CHANGES});
     }
 
-    ngDoCheck() {
+    /* ngDoCheck() {
         this._logger.log({node: this, lifecycleHook: LifecycleHook.NG_DO_CHECK});
-    }
+    } */
 
     ngAfterViewChecked() {
         if (!this._callbackFlasher && !!this.flashCanvas) {

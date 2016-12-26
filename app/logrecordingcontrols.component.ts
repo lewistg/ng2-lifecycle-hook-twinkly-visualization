@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,  ChangeDetectionStrategy, ElementRef, NgZone, ViewChild } from '@angular/core';
 
 import { LogEntry, ComponentNodeLifecycleLog } from './componentnodelifecyclehooklog';
 
@@ -8,15 +8,15 @@ import { LogEntry, ComponentNodeLifecycleLog } from './componentnodelifecyclehoo
         <div class="step-indicator">
             <div class="track">
                  <div 
-                    [ngStyle]="{ 'left': indicatorLeftOffsetStyle}"
+                    [ngStyle]="{'left': indicatorLeftOffsetStyle}"
                     class="indicator"
                 ></div>
             </div>
         </div>
         <div class="controls">
             <div 
+                #recordButton
                 class="button record"
-                (click)="onClickRecord()"
                 [class.recording]="logger.record"
                 tabindex="-1"
             >⚫</div>
@@ -110,22 +110,36 @@ import { LogEntry, ComponentNodeLifecycleLog } from './componentnodelifecyclehoo
             border-radius: 12px;
             position: relative;
         }
-    `]
+    `],
 })
 export class LogControlsComponent { 
+    @ViewChild('recordButton') recordButton: ElementRef;
+
     private _currLogEntry: LogEntry|undefined;
     private _currLogEntryIndex: number = -1;
     
-    constructor(public logger: ComponentNodeLifecycleLog) { }
+    constructor(
+        public logger: ComponentNodeLifecycleLog,
+        private _ngZone: NgZone 
+    ) { }
 
-    onClickRecord() {
+    ngAfterViewInit() {
+        this._ngZone.runOutsideAngular(() => {
+            this.recordButton.nativeElement.addEventListener('mousedown', () => {
+                this._stopStepping();
+        
+                this.logger.record = !this.logger.record
+                if (this.logger.record) {
+                    this.logger.clear(); 
+                }
+            });
+        });
+    }
+
+    /*onClickRecord() {
         this._stopStepping();
 
-        this.logger.record = !this.logger.record
-        if (this.logger.record) {
-            this.logger.clear(); 
-        }
-    }
+    }*/
 
     onClickPlay() {
         this.logger.record = false;

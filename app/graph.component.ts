@@ -54,7 +54,7 @@ import { DOMLineSegment, getClientRectLocation, subtract as subDOMLocations } fr
             margin-bottom: 15px;
         }
     `],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    /* changeDetection: ChangeDetectionStrategy.OnPush */
 })
 export class GraphComponent implements AfterViewInit {
     @ViewChildren('levelAnchor', {read: ViewContainerRef}) levelViewContainers: QueryList<ViewContainerRef>;
@@ -73,7 +73,10 @@ export class GraphComponent implements AfterViewInit {
 
     private _connectionsInitialized = false;
 
-    constructor(private _cdr: ChangeDetectorRef, private _elementRef: ElementRef) { } 
+    constructor(
+        /* private _cdr: ChangeDetectorRef, */
+        private _elementRef: ElementRef
+    ) { } 
 
     private _tickThenInitializeConnections() {
         let hostRect = this._elementRef.nativeElement.getBoundingClientRect();
@@ -93,7 +96,7 @@ export class GraphComponent implements AfterViewInit {
             }
             calculateSubgraphConnections(this.rootNode);
 
-            this._cdr.markForCheck();
+            /* this._cdr.markForCheck(); */
 
             this._connectionsInitialized = true;
         }, 0)
@@ -105,7 +108,7 @@ export class GraphComponent implements AfterViewInit {
             let renderSubgraph = (subgraphRoot: NodeComponent) => {
                 let vc = levelViewContainers[subgraphRoot.level];
                 vc.createEmbeddedView(subgraphRoot.componentDivTemplate);
-                subgraphRoot.cdr.markForCheck();
+                /* subgraphRoot.cdr.markForCheck(); */
                 subgraphRoot.childNodes.forEach(renderSubgraph);
             }
             renderSubgraph(this.rootNode);
