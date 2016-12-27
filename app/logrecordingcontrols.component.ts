@@ -117,7 +117,7 @@ export class LogControlsComponent {
 
     private _currLogEntry: LogEntry|undefined;
     private _currLogEntryIndex: number = -1;
-    
+
     constructor(
         public logger: ComponentNodeLifecycleLog,
         private _ngZone: NgZone 

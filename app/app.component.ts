@@ -5,7 +5,8 @@ import { ComponentNodeLifecycleLog } from './componentnodelifecyclehooklog';
 @Component({
   selector: 'my-app',
   template: `
-    <graph [numLevels]="5"></graph>
+    <expression-tree></expression-tree>
+    <!--graph [numLevels]="5"></graph-->
     <log-controls></log-controls>
   `,
   providers: [ComponentNodeLifecycleLog]
