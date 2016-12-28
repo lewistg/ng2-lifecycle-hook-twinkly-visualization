@@ -18,6 +18,7 @@ import { LogEntry, ComponentNodeLifecycleLog } from './componentnodelifecyclehoo
                 #recordButton
                 class="button record"
                 [class.recording]="logger.record"
+                (mousedown)="onMousedownRecord()"
                 tabindex="-1"
             >⚫</div>
             <div class="separator"></div>
@@ -123,23 +124,14 @@ export class LogControlsComponent {
         private _ngZone: NgZone 
     ) { }
 
-    ngAfterViewInit() {
-        this._ngZone.runOutsideAngular(() => {
-            this.recordButton.nativeElement.addEventListener('mousedown', () => {
-                this._stopStepping();
-        
-                this.logger.record = !this.logger.record
-                if (this.logger.record) {
-                    this.logger.clear(); 
-                }
-            });
-        });
-    }
-
-    /*onClickRecord() {
+    onMousedownRecord() {
         this._stopStepping();
 
-    }*/
+        this.logger.record = !this.logger.record
+        if (this.logger.record) {
+            this.logger.clear(); 
+        }
+    }
 
     onClickPlay() {
         this.logger.record = false;
@@ -183,20 +175,20 @@ export class LogControlsComponent {
         }
 
         if (this._currLogEntry) {
-            this._currLogEntry.node.releaseFlash();
+            this._currLogEntry.flasher.releaseFlash();
         }
 
         this._currLogEntryIndex += offset;
         this._currLogEntryIndex = Math.min(Math.max(0, this._currLogEntryIndex), this.logger.length - 1);
 
         let entry = this.logger.get(this._currLogEntryIndex);
-        entry.node.holdFlash(ComponentNodeLifecycleLog.LIFECYCLE_HOOK_COLORS.get(entry.lifecycleHook));
+        entry.flasher.holdFlash(ComponentNodeLifecycleLog.LIFECYCLE_HOOK_COLORS.get(entry.lifecycleHook));
         this._currLogEntry = entry;
     }
 
     private _stopStepping() {
         if (this._currLogEntry) {
-            this._currLogEntry.node.releaseFlash();
+            this._currLogEntry.flasher.releaseFlash();
         }
         this._currLogEntry = undefined;
         this._currLogEntryIndex = -1;
