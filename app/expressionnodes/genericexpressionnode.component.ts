@@ -39,6 +39,12 @@ export class GenericExpressionNodeComponent implements ExpressionNodeComponent {
         }
     }
 
+    get nodeElementRef(): ElementRef {
+        if (!!this.node) {
+            return this.node.nodeElementRef;
+        }
+    }
+
     get childNodes(): ExpressionNodeComponent[] {
         if (!!this.node) {
             return this.node.childNodes || [];
@@ -56,9 +62,4 @@ export class GenericExpressionNodeComponent implements ExpressionNodeComponent {
     }
 
     constructor(public elementRef: ElementRef) {}
-
-    ngAfterViewInit() {
-        debugger;
-        console.log(this);
-    }
 }

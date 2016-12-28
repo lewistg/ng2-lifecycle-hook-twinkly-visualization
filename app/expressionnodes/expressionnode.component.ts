@@ -1,7 +1,8 @@
-import { OpaqueToken, TemplateRef } from '@angular/core';
+import { ElementRef, OpaqueToken, TemplateRef } from '@angular/core';
 
 export interface ExpressionNodeComponent {
     nodeDivTemplate: TemplateRef<void>;
+    nodeElementRef: ElementRef;
     childNodes: ExpressionNodeComponent[];
 }
 

@@ -17,19 +17,13 @@ import { CompoundExpression, Expression } from '../expression';
     selector: 'compound-expression-node',
     template: `
         <template #nodeDivTemplate>
-            <div
-                #nodeDiv
-                class="node-box"
-                [style.margin-left.px]="padding"
-                [style.margin-right.px]="padding"
-            >
+            <flash-node #nodeElementRef>
                 <select>
                    <option>+</option>
                    <option>-</option>
                    <option>*</option>
                 </select> 
-                <canvas #flashCanvas width="40" height="40"></canvas>
-            </div>
+            </flash-node>
         </template>
         <expression-node
             #leftExpression
@@ -40,6 +34,15 @@ import { CompoundExpression, Expression } from '../expression';
             [(expression)]="expression && expression.right"
         ></expression-node>
     `,
+    styles: [`
+        .node-div {
+            display: flex;
+            position: relative;
+        }
+        select {
+            display: flex;
+        }
+    `],
     providers: [{provide: EXPRESSION_NODE_COMPONENT, useExisting: CompoundExpressionComponent}]
 })
 export class CompoundExpressionComponent implements ExpressionNodeComponent {
@@ -55,7 +58,7 @@ export class CompoundExpressionComponent implements ExpressionNodeComponent {
     }
 
     @ViewChild('nodeDivTemplate') nodeDivTemplate: TemplateRef<void>;
-    @ViewChild('nodeDiv') nodeDiv: ElementRef;
+    @ViewChild('nodeElementRef', {read: ElementRef}) nodeElementRef: ElementRef;
     @ViewChildren('leftExpression, rightExpression', {read: EXPRESSION_NODE_COMPONENT}) childExpressions: QueryList<ExpressionNodeComponent>;
 
     get childNodes(): ExpressionNodeComponent[] {
@@ -65,9 +68,4 @@ export class CompoundExpressionComponent implements ExpressionNodeComponent {
             return [];
         }
     }
-
-    /*ngAfterViewInit() {
-        debugger;
-        console.log(this);
-    }*/
 }
