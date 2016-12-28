@@ -1,4 +1,5 @@
 import { 
+    AfterViewChecked,
     Component,
     ElementRef,
     EventEmitter,
@@ -9,15 +10,16 @@ import {
     ViewChild,
 } from '@angular/core';
 
-import { ExpressionNodeComponent, EXPRESSION_NODE_COMPONENT } from './expressionnode.component';
-
+import { ComponentNodeLifecycleLog, LifecycleHook } from '../componentnodelifecyclehooklog';
 import { Expression, NumberExpression } from '../expression';
+import { ExpressionNodeComponent, EXPRESSION_NODE_COMPONENT } from './expressionnode.component';
+import { NgLifecycleHookFlasher } from '../flashnode.component';
 
 @Component({
     selector: 'number-expression-node',
     template:  `
         <template #nodeDivTemplate>
-            <flash-node #nodeElementRef>
+            <ng-lifecylce-hook-flasher #nodeElementRef>
                 <div #nodeDiv>
                     <select [(ngModel)]="value">
                         <option>0</option>
@@ -32,7 +34,7 @@ import { Expression, NumberExpression } from '../expression';
                         <option>9</option>
                     </select>
                 </div>
-            </flash-node>
+            </ng-lifecylce-hook-flasher>
         </template>
     `,
     providers: [{provide: EXPRESSION_NODE_COMPONENT, useExisting: NumberExpressionNodeComponent}],
@@ -44,23 +46,43 @@ import { Expression, NumberExpression } from '../expression';
         }
     `]
 })
-export class NumberExpressionNodeComponent implements ExpressionNodeComponent, OnChanges  {
+export class NumberExpressionNodeComponent implements AfterViewChecked, ExpressionNodeComponent, OnChanges  {
     @Output() expressionChange: EventEmitter<Expression> = new EventEmitter<Expression>(false);
     @Input() expression: NumberExpression = new NumberExpression(0);
 
-    get value(): number {
-        return this.expression.value;
+    get value(): string {
+        return this.expression.value.toString();
     }
-    set value(value: number) {
-        this.expression = this.expression.setValue(value);
+    set value(value: string) {
+        if (this.value.toString() === value) {
+            return;
+        }
+        this.expression = this.expression.setValue(parseInt(value, 10));
         this.expressionChange.emit(this.expression);
     }
 
     @ViewChild('nodeDivTemplate') nodeDivTemplate: TemplateRef<void>;
     @ViewChild('nodeElementRef', {read: ElementRef}) nodeElementRef: ElementRef;
+    @ViewChild(NgLifecycleHookFlasher) flasher: NgLifecycleHookFlasher;
     readonly childNodes: ExpressionNodeComponent[] = [];
 
+    constructor(private _log: ComponentNodeLifecycleLog) { }
+
+    ngAfterViewChecked() {
+        if (!!this.flasher) {
+            this._log.log({
+                flasher: this.flasher,
+                lifecycleHook: LifecycleHook.NG_AFTER_VIEW_CHECKED
+            });
+        }
+    }
+
     ngOnChanges() {
-        console.log('here!');
+        if (!!this.flasher) {
+            this._log.log({
+                flasher: this.flasher,
+                lifecycleHook: LifecycleHook.NG_ON_CHANGES
+            });
+        }
     }
 }

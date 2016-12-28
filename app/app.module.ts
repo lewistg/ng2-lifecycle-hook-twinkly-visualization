@@ -6,7 +6,7 @@ import { AppComponent }  from './app.component';
 import { NodeComponent } from './componentnode.component';
 import { GenericExpressionNodeComponent } from './expressionnodes/genericexpressionnode.component';
 import { ExpressionTreeComponent } from './expressiontree.component';
-import { FlashNode } from './flashnode.component';
+import { NgLifecycleHookFlasher } from './flashnode.component';
 import { CompoundExpressionComponent } from './expressionnodes/compoundexpressionnode.component';
 import { GraphComponent } from './graph.component';
 import { ConnectorComponent } from './connector.component';
@@ -20,7 +20,7 @@ import { NumberExpressionNodeComponent } from './expressionnodes/numberexpressio
         CompoundExpressionComponent,
         ConnectorComponent,
         ExpressionTreeComponent,
-        FlashNode,
+        NgLifecycleHookFlasher,
         GenericExpressionNodeComponent,
         GraphComponent, 
         LogControlsComponent,

@@ -1,4 +1,4 @@
-import { ElementRef, OpaqueToken, TemplateRef } from '@angular/core';
+import { ElementRef, EventEmitter, OpaqueToken, TemplateRef } from '@angular/core';
 
 export interface ExpressionNodeComponent {
     nodeDivTemplate: TemplateRef<void>;
@@ -7,4 +7,3 @@ export interface ExpressionNodeComponent {
 }
 
 export let EXPRESSION_NODE_COMPONENT = new OpaqueToken('EXPRESSION_NODE_COMPONENT');
-

@@ -1,4 +1,4 @@
-import { NodeComponent } from './componentnode.component';
+import { NgLifecycleHookFlasher } from './flashnode.component';
 
 export enum LifecycleHook {
     NG_ON_CHANGES,
@@ -7,7 +7,7 @@ export enum LifecycleHook {
 }
 
 export interface LogEntry {
-    node: NodeComponent,
+    flasher: NgLifecycleHookFlasher,
     lifecycleHook: LifecycleHook,
 }
 
@@ -27,7 +27,7 @@ export class ComponentNodeLifecycleLog {
 
     log(entry: LogEntry) {
         if (this.livePlayback) {
-            entry.node.flash(ComponentNodeLifecycleLog.LIFECYCLE_HOOK_COLORS.get(entry.lifecycleHook));
+            entry.flasher.flash(ComponentNodeLifecycleLog.LIFECYCLE_HOOK_COLORS.get(entry.lifecycleHook));
         }
 
         if (this.record) {
