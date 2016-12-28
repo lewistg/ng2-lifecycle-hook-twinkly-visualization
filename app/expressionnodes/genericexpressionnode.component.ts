@@ -39,6 +39,9 @@ export class GenericExpressionNodeComponent implements ExpressionNodeComponent {
         return this._expression;
     }
     set expression(value: Expression) {
+        if (this._expression === value) {
+            return;
+        }
         this._expression = value;
         this.expressionChange.emit(this._expression);
     }
