@@ -1,4 +1,13 @@
-import { Component, ElementRef, EventEmitter, Input, OpaqueToken, Output, TemplateRef, ViewChild } from '@angular/core';
+import { 
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    OpaqueToken,
+    Output,
+    TemplateRef,
+    ViewChild 
+} from '@angular/core';
 
 import { ExpressionNodeComponent, EXPRESSION_NODE_COMPONENT } from './expressionnode.component';
 import { CompoundExpressionComponent } from './compoundexpressionnode.component';
@@ -10,27 +19,30 @@ import { CompoundExpression, NumberExpression, Expression } from '../expression'
         <template [ngIf]="isCompoundExpression">
             <compound-expression-node 
                 #node
-                [expression]="expression"
+                [(expression)]="expression"
             ></compound-expression-node>
         </template>
         <template [ngIf]="isNumberExpression">
             <number-expression-node
                 #node
-                [expression]="expression"
+                [(expression)]="expression"
             ></number-expression-node>
         </template>
     `,
     providers: [{provide: EXPRESSION_NODE_COMPONENT, useExisting: GenericExpressionNodeComponent}]
 })
 export class GenericExpressionNodeComponent implements ExpressionNodeComponent {
+    @Output() expressionChange: EventEmitter<Expression> = new EventEmitter<Expression>(false);
+
     private _expression: Expression;
     @Input() get expression(): Expression {
         return this._expression;
     }
     set expression(value: Expression) {
         this._expression = value;
+        this.expressionChange.emit(this._expression);
     }
-    @Output() expressionChange: EventEmitter<Expression> = new EventEmitter<Expression>(false);
+
     @ViewChild('node', {read: EXPRESSION_NODE_COMPONENT}) node: ExpressionNodeComponent;
 
     get nodeDivTemplate(): TemplateRef<void> {

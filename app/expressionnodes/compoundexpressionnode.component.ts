@@ -1,4 +1,5 @@
 import { 
+    OnChanges,
     Component,
     ElementRef,
     EventEmitter,
@@ -11,7 +12,7 @@ import {
 } from '@angular/core';
 
 import { ExpressionNodeComponent, EXPRESSION_NODE_COMPONENT } from './expressionnode.component';
-import { CompoundExpression, Expression } from '../expression';
+import { CompoundExpression, Expression, NumberExpression, Operator } from '../expression';
 
 @Component({
     selector: 'compound-expression-node',
@@ -26,12 +27,12 @@ import { CompoundExpression, Expression } from '../expression';
             </flash-node>
         </template>
         <expression-node
-            #leftExpression
-            [(expression)]="expression && expression.left"
+            #leftExpressionNode
+            [(expression)]="leftExpression"
         ></expression-node>
         <expression-node
-            #rightExpression
-            [(expression)]="expression && expression.right"
+            #rightExpressionNode
+            [(expression)]="rightExpression"
         ></expression-node>
     `,
     styles: [`
@@ -40,26 +41,42 @@ import { CompoundExpression, Expression } from '../expression';
             position: relative;
         }
         select {
-            display: flex;
+            background-color: rgba(255, 255, 255, 0);
+            font-size: 20px;
+            border: none;
         }
     `],
     providers: [{provide: EXPRESSION_NODE_COMPONENT, useExisting: CompoundExpressionComponent}]
 })
-export class CompoundExpressionComponent implements ExpressionNodeComponent {
+export class CompoundExpressionComponent implements ExpressionNodeComponent, OnChanges {
     @Output() expressionChange: EventEmitter<Expression> = new EventEmitter<Expression>(false);
 
-    private _expression: Expression; 
-    @Input() set expression(value: Expression) {
+    private _expression: CompoundExpression = new CompoundExpression(new NumberExpression(0), Operator.ADD, new NumberExpression(0)); 
+    @Input() set expression(value: CompoundExpression) {
         this._expression = value;
-        this.expressionChange.emit();
+        this.expressionChange.emit(this._expression);
     }
-    get expression(): Expression {
+    get expression(): CompoundExpression {
         return this._expression;
+    }
+
+    get leftExpression(): Expression {
+        return this._expression.left;
+    }
+    set leftExpression(expression: Expression) {
+        this.expression = this.expression.setLeftExpression(expression);
+    }
+
+    get rightExpression(): Expression {
+        return this._expression.right;
+    }
+    set rightExpression(expression: Expression) {
+        this.expression = this.expression.setRightExpression(expression);
     }
 
     @ViewChild('nodeDivTemplate') nodeDivTemplate: TemplateRef<void>;
     @ViewChild('nodeElementRef', {read: ElementRef}) nodeElementRef: ElementRef;
-    @ViewChildren('leftExpression, rightExpression', {read: EXPRESSION_NODE_COMPONENT}) childExpressions: QueryList<ExpressionNodeComponent>;
+    @ViewChildren('leftExpressionNode, rightExpressionNode', {read: EXPRESSION_NODE_COMPONENT}) childExpressions: QueryList<ExpressionNodeComponent>;
 
     get childNodes(): ExpressionNodeComponent[] {
         if (!!this.childExpressions) {
@@ -67,5 +84,9 @@ export class CompoundExpressionComponent implements ExpressionNodeComponent {
         } else {
             return [];
         }
+    }
+
+    ngOnChanges() {
+        console.log('changed!');
     }
 }

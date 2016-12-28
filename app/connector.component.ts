@@ -16,7 +16,7 @@ import { DOMLineSegment, DOMLocation } from './domgeometry';
                 [attr.y1]="y1"
                 [attr.x2]="x2"
                 [attr.y2]="y2"
-                style="stroke:rgb(0, 0, 0); stroke-width:2"
+                style="stroke:rgb(0, 0, 0); stroke-width:1"
             ></line>
         </svg>
     `,

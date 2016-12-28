@@ -27,9 +27,25 @@ export class CompoundExpression implements Expression {
                 return 0;
         }
     }
+
+    setRightExpression(right: Expression): CompoundExpression {
+        return new CompoundExpression(this.left, this.operator, right);
+    }
+
+    setLeftExpression(left: Expression): CompoundExpression {
+        return new CompoundExpression(left, this.operator, this.right);
+    }
+
+    setOperator(operator: Operator): CompoundExpression {
+        return new CompoundExpression(this.left, operator, this.right);
+    }
 }
 
 export class NumberExpression implements Expression {
     constructor(public value: number = 0) {}
+
+    setValue(value: number): NumberExpression {
+        return new NumberExpression(value);
+    }
 }
 
