@@ -10,10 +10,11 @@ import {
     ViewChild,
 } from '@angular/core';
 
-import { ComponentNodeLifecycleLog, LifecycleHook } from '../componentnodelifecyclehooklog';
 import { Expression, NumberExpression } from '../expression';
 import { ExpressionNodeComponent, EXPRESSION_NODE_COMPONENT } from './expressionnode.component';
-import { NgLifecycleHookFlasher } from '../flashnode.component';
+import { FlashLog } from '../model/flashlog';
+import { FlasherComponent } from '../view/flasher.component';
+import { NgOnChangesCalled, NgAfterViewChecked } from '../view/flashlogentries';
 
 @Component({
     selector: 'number-expression-node',
@@ -63,26 +64,20 @@ export class NumberExpressionNodeComponent implements AfterViewChecked, Expressi
 
     @ViewChild('nodeDivTemplate') nodeDivTemplate: TemplateRef<void>;
     @ViewChild('nodeElementRef', {read: ElementRef}) nodeElementRef: ElementRef;
-    @ViewChild(NgLifecycleHookFlasher) flasher: NgLifecycleHookFlasher;
+    @ViewChild(FlasherComponent) flasher: FlasherComponent;
     readonly childNodes: ExpressionNodeComponent[] = [];
 
-    constructor(private _log: ComponentNodeLifecycleLog) { }
+    constructor(private _log: FlashLog) { }
 
     ngAfterViewChecked() {
         if (!!this.flasher) {
-            this._log.log({
-                flasher: this.flasher,
-                lifecycleHook: LifecycleHook.NG_AFTER_VIEW_CHECKED
-            });
+            this._log.log(new NgAfterViewChecked(this.flasher), true);
         }
     }
 
     ngOnChanges() {
         if (!!this.flasher) {
-            this._log.log({
-                flasher: this.flasher,
-                lifecycleHook: LifecycleHook.NG_ON_CHANGES
-            });
+            this._log.log(new NgOnChangesCalled(this.flasher), true);
         }
     }
 }

@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 
-import { ComponentNodeLifecycleLog } from './componentnodelifecyclehooklog';
+import { FlashLog } from './model/flashlog';
 
 @Component({
   selector: 'my-app',
   template: `
     <expression-tree></expression-tree>
     <!--graph [numLevels]="5"></graph-->
-    <log-controls></log-controls>
+    <!--log-controls></log-controls-->
   `,
-  providers: [ComponentNodeLifecycleLog]
+  providers: [FlashLog]
 })
 export class AppComponent  {  }

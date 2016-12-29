@@ -1,4 +1,4 @@
-import { NgLifecycleHookFlasher } from './flashnode.component';
+/*import { NgLifecycleHookFlasher } from './flashnode.component';
 
 export enum LifecycleHook {
     NG_ON_CHANGES,
@@ -42,4 +42,4 @@ export class ComponentNodeLifecycleLog {
     clear() {
         this._entries = [];
     }
-}
+}*/

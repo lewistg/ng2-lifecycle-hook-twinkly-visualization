@@ -12,10 +12,11 @@ import {
     ViewChildren 
 } from '@angular/core';
 
-import { ComponentNodeLifecycleLog, LifecycleHook } from '../componentnodelifecyclehooklog';
 import { ExpressionNodeComponent, EXPRESSION_NODE_COMPONENT } from './expressionnode.component';
+import { FlashLog } from '../model/flashlog';
 import { CompoundExpression, Expression, NumberExpression, Operator } from '../expression';
-import { NgLifecycleHookFlasher } from '../flashnode.component';
+import { FlasherComponent } from '../view/flasher.component';
+import { NgOnChangesCalled, NgAfterViewChecked } from '../view/flashlogentries';
 
 @Component({
     selector: 'compound-expression-node',
@@ -101,7 +102,7 @@ export class CompoundExpressionComponent implements AfterViewChecked, Expression
 
     @ViewChild('nodeDivTemplate') nodeDivTemplate: TemplateRef<void>;
     @ViewChild('nodeElementRef', {read: ElementRef}) nodeElementRef: ElementRef;
-    @ViewChild(NgLifecycleHookFlasher) flasher: NgLifecycleHookFlasher;
+    @ViewChild(FlasherComponent) flasher: FlasherComponent;
     @ViewChildren('leftExpressionNode, rightExpressionNode', {read: EXPRESSION_NODE_COMPONENT}) childExpressions: QueryList<ExpressionNodeComponent>;
 
     get childNodes(): ExpressionNodeComponent[] {
@@ -112,23 +113,17 @@ export class CompoundExpressionComponent implements AfterViewChecked, Expression
         }
     }
 
-    constructor(private _log: ComponentNodeLifecycleLog) { }
+    constructor(private _log: FlashLog) { }
 
     ngAfterViewChecked() {
         if (!!this.flasher) {
-            this._log.log({
-                flasher: this.flasher,
-                lifecycleHook: LifecycleHook.NG_AFTER_VIEW_CHECKED
-            });
+            this._log.log(new NgAfterViewChecked(this.flasher), true);
         }
     }
 
     ngOnChanges() {
         if (!!this.flasher) {
-            this._log.log({
-                flasher: this.flasher,
-                lifecycleHook: LifecycleHook.NG_ON_CHANGES
-            });
+            this._log.log(new NgOnChangesCalled(this.flasher), true);
         }
     }
 }

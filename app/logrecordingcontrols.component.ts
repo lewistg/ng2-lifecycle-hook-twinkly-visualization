@@ -1,4 +1,4 @@
-import { Component,  ChangeDetectionStrategy, ElementRef, NgZone, ViewChild } from '@angular/core';
+/*import { Component,  ChangeDetectionStrategy, ElementRef, NgZone, ViewChild } from '@angular/core';
 
 import { LogEntry, ComponentNodeLifecycleLog } from './componentnodelifecyclehooklog';
 
@@ -198,4 +198,4 @@ export class LogControlsComponent {
         this.logger.livePlayback = true;
         this._stopStepping();
     }
-}
+}*/
