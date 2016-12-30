@@ -13,6 +13,7 @@ import {
 import { Expression, NumberExpression } from '../expression';
 import { ExpressionNodeComponent, EXPRESSION_NODE_COMPONENT } from './expressionnode.component';
 import { FlashLog } from '../model/flashlog';
+import { FlashLogPlayback } from '../model/flashlogplayback';
 import { FlasherComponent } from '../view/flasher.component';
 import { NgOnChangesCalled, NgAfterViewChecked } from '../view/flashlogentries';
 
@@ -67,17 +68,17 @@ export class NumberExpressionNodeComponent implements AfterViewChecked, Expressi
     @ViewChild(FlasherComponent) flasher: FlasherComponent;
     readonly childNodes: ExpressionNodeComponent[] = [];
 
-    constructor(private _log: FlashLog) { }
+    constructor(private _log: FlashLog, private _logPlayback: FlashLogPlayback) { }
 
     ngAfterViewChecked() {
         if (!!this.flasher) {
-            this._log.log(new NgAfterViewChecked(this.flasher), true);
+            this._log.log(new NgAfterViewChecked(this.flasher), !this._logPlayback.isPlayingBack);
         }
     }
 
     ngOnChanges() {
         if (!!this.flasher) {
-            this._log.log(new NgOnChangesCalled(this.flasher), true);
+            this._log.log(new NgOnChangesCalled(this.flasher), !this._logPlayback.isPlayingBack);
         }
     }
 }

@@ -9,6 +9,7 @@ import { FlasherComponent } from './view/flasher.component';
 import { CompoundExpressionComponent } from './expressionnodes/compoundexpressionnode.component';
 import { ConnectorComponent } from './connector.component';
 //import { LogControlsComponent } from './logrecordingcontrols.component';
+import { LogPlaybackControlsComponent }  from './view/logplaybackcontrols/logplaybackcontrols.component';
 import { NumberExpressionNodeComponent } from './expressionnodes/numberexpressionnode.component'
 
 @NgModule({
@@ -21,6 +22,7 @@ import { NumberExpressionNodeComponent } from './expressionnodes/numberexpressio
         FlasherComponent,
         GenericExpressionNodeComponent,
         //LogControlsComponent,
+        LogPlaybackControlsComponent,
         NumberExpressionNodeComponent 
   ],
   bootstrap:    [ AppComponent ]
