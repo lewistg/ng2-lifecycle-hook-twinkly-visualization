@@ -11,6 +11,7 @@ import { ConnectorComponent } from './connector.component';
 //import { LogControlsComponent } from './logrecordingcontrols.component';
 import { LogPlaybackControlsComponent }  from './view/logplaybackcontrols/logplaybackcontrols.component';
 import { NumberExpressionNodeComponent } from './expressionnodes/numberexpressionnode.component'
+import { SliderComponent } from './view/logplaybackcontrols/slider.component';
 
 @NgModule({
   imports:      [ BrowserModule, FormsModule ],
@@ -23,7 +24,8 @@ import { NumberExpressionNodeComponent } from './expressionnodes/numberexpressio
         GenericExpressionNodeComponent,
         //LogControlsComponent,
         LogPlaybackControlsComponent,
-        NumberExpressionNodeComponent 
+        NumberExpressionNodeComponent,
+        SliderComponent,
   ],
   bootstrap:    [ AppComponent ]
 })

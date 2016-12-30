@@ -7,10 +7,15 @@ import { FlashLogPlayback } from './model/flashlogplayback';
   selector: 'my-app',
   template: `
     <expression-tree></expression-tree>
+    <log-playback-slider></log-playback-slider>
     <log-playback-controls></log-playback-controls>
     <!--graph [numLevels]="5"></graph-->
     <!--log-controls></log-controls-->
   `,
   providers: [FlashLog, FlashLogPlayback]
 })
-export class AppComponent  {  }
+export class AppComponent  { 
+    constructor(private _log: FlashLog) {
+        this._log.record = false;
+    }
+}
