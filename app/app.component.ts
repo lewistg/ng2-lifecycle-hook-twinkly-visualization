@@ -7,12 +7,23 @@ import { FlashLogPlayback } from './model/flashlogplayback';
   selector: 'my-app',
   template: `
     <expression-tree></expression-tree>
-    <log-playback-slider></log-playback-slider>
-    <log-playback-controls></log-playback-controls>
-    <!--graph [numLevels]="5"></graph-->
-    <!--log-controls></log-controls-->
+    <div class="controls">
+        <log-playback-slider></log-playback-slider>
+        <log-playback-controls></log-playback-controls>
+        <log-playback-messages></log-playback-messages>
+    </div>
   `,
-  providers: [FlashLog, FlashLogPlayback]
+  providers: [FlashLog, FlashLogPlayback],
+  styles: [`
+      .controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .controls log-playback-controls {
+        margin-bottom: 10px;
+      }
+  `]
 })
 export class AppComponent  { 
     constructor(private _log: FlashLog) {

@@ -18,7 +18,10 @@ import { DOMLineSegment, getClientRectLocation, subtract as subDOMLocations } fr
 @Component({
     selector: 'expression-tree',
     template: `
-        <div class="wrapper">
+        <div 
+            #wrapper
+            class="wrapper"
+        >
             <div class="levels">
                 <div class="level" *ngFor="let level of levels; let i = index">
                     <div #levelAnchor></div>
@@ -40,6 +43,7 @@ import { DOMLineSegment, getClientRectLocation, subtract as subDOMLocations } fr
     styles: [`
         :host {
             display: flex;
+            justify-content: center;
         }
         .wrapper {
             position: relative;
@@ -69,6 +73,7 @@ export class ExpressionTreeComponent implements AfterViewInit, AfterViewChecked 
     @ViewChild('rootExpression', {read: EXPRESSION_NODE_COMPONENT}) rootExpressionNode: ExpressionNodeComponent;
     @ViewChildren('levelAnchor', {read: ViewContainerRef}) levelViewContainers: QueryList<ViewContainerRef>;
     @ViewChild('nodeSpacer') nodeSpacerTemplate: TemplateRef<void>;
+    @ViewChild('wrapper') wrapper: ElementRef;
 
     constructor(private _elementRef: ElementRef) {
         this.levels = [null];
@@ -101,10 +106,9 @@ export class ExpressionTreeComponent implements AfterViewInit, AfterViewChecked 
     }
 
     private _tickThenInitializeConnections() {
-        let hostRect = this._elementRef.nativeElement.getBoundingClientRect();
-
         setTimeout(() => {
             this.connections = [];
+            let hostRect = this.wrapper.nativeElement.getBoundingClientRect();
             let calculateSubgraphConnections = (subgraphRoot: ExpressionNodeComponent) => {
                 let p0 = getClientRectLocation(subgraphRoot.nodeElementRef.nativeElement, 0.5, 1);
                 p0 = subDOMLocations(p0, hostRect);

@@ -8,8 +8,8 @@ import { ExpressionTreeComponent } from './expressiontree.component';
 import { FlasherComponent } from './view/flasher.component';
 import { CompoundExpressionComponent } from './expressionnodes/compoundexpressionnode.component';
 import { ConnectorComponent } from './connector.component';
-//import { LogControlsComponent } from './logrecordingcontrols.component';
 import { LogPlaybackControlsComponent }  from './view/logplaybackcontrols/logplaybackcontrols.component';
+import { LogMessagesPlaybackComponent } from './view/logplaybackcontrols/logmessages.component';
 import { NumberExpressionNodeComponent } from './expressionnodes/numberexpressionnode.component'
 import { SliderComponent } from './view/logplaybackcontrols/slider.component';
 
@@ -22,8 +22,8 @@ import { SliderComponent } from './view/logplaybackcontrols/slider.component';
         ExpressionTreeComponent,
         FlasherComponent,
         GenericExpressionNodeComponent,
-        //LogControlsComponent,
         LogPlaybackControlsComponent,
+        LogMessagesPlaybackComponent,
         NumberExpressionNodeComponent,
         SliderComponent,
   ],
