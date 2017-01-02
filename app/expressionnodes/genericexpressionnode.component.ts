@@ -17,7 +17,7 @@ import { CompoundExpression, NumberExpression, Expression } from '../expression'
     selector: 'expression-node',
     template: `
         <template [ngIf]="isCompoundExpression">
-            <compound-expression-node 
+            <compound-expression-node
                 #node
                 [(expression)]="expression"
             ></compound-expression-node>

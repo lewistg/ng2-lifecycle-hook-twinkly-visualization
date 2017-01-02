@@ -39,6 +39,22 @@ export class CompoundExpression implements Expression {
     setOperator(operator: Operator): CompoundExpression {
         return new CompoundExpression(this.left, operator, this.right);
     }
+
+    toString() {
+        let operator: string;
+        switch(this.operator) {
+            case Operator.ADD:
+                operator = '+';
+                break;
+            case Operator.SUBTRACT:
+                operator = '-';
+                break;
+            case Operator.MULTIPLY:
+                operator = '*';
+                break;
+        }
+        return `(${this.left.toString()} ${operator} ${this.right.toString()})`;
+    }
 }
 
 export class NumberExpression implements Expression {
@@ -46,6 +62,10 @@ export class NumberExpression implements Expression {
 
     setValue(value: number): NumberExpression {
         return new NumberExpression(value);
+    }
+
+    toString() {
+        return this.value.toString();
     }
 }
 

@@ -17,7 +17,7 @@ import { FlashLog } from '../model/flashlog';
 import { FlashLogPlayback } from '../model/flashlogplayback';
 import { CompoundExpression, Expression, NumberExpression, Operator } from '../expression';
 import { FlasherComponent } from '../view/flasher.component';
-import { NgOnChangesCalled, NgAfterViewChecked } from '../view/flashlogentries';
+import { ExpressionChanged, NgOnChangesCalled, NgAfterViewChecked } from '../view/flashlogentries';
 
 @Component({
     selector: 'compound-expression-node',
@@ -73,6 +73,11 @@ export class CompoundExpressionComponent implements AfterViewChecked, Expression
         if (this._expression === value) {
             return;
         }
+        
+        if (!!this.flasher) {
+            this._log.log(new ExpressionChanged(this.flasher, this._expression, value), !this._logPlayback.isPlayingBack);
+        }
+
         this._expression = value;
         this.expressionChange.emit(this._expression);
     }
