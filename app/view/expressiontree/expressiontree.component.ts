@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 
 import { Expression, CompoundExpression, NumberExpression, Operator } from '../../expression';
-import { ExpressionNodeComponent, EXPRESSION_NODE_COMPONENT } from '../../expressionnodes/expressionnode.component';
+import { ExpressionNodeComponent, EXPRESSION_NODE_COMPONENT } from '../expressionnodes/expressionnode.component';
 import { GenericExpressionNodeComponent } from '../expressionnodes/genericexpressionnode/genericexpressionnode.component';
 import { DOMLineSegment, getClientRectLocation, subtract as subDOMLocations } from '../../domgeometry';
 

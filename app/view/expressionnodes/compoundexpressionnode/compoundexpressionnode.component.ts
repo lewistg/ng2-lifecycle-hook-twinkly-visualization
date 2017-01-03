@@ -12,7 +12,7 @@ import {
     ViewChildren 
 } from '@angular/core';
 
-import { ExpressionNodeComponent, EXPRESSION_NODE_COMPONENT } from '../../../expressionnodes/expressionnode.component';
+import { ExpressionNodeComponent, EXPRESSION_NODE_COMPONENT } from '../expressionnode.component';
 import { FlashLog } from '../../../model/flashlog';
 import { FlashLogPlayback } from '../../../model/flashlogplayback';
 import { CompoundExpression, Expression, NumberExpression, Operator } from '../../../expression';

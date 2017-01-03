@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 
 import { Expression, NumberExpression } from '../../../expression';
-import { ExpressionNodeComponent, EXPRESSION_NODE_COMPONENT } from '../../../expressionnodes/expressionnode.component';
+import { ExpressionNodeComponent, EXPRESSION_NODE_COMPONENT } from '../expressionnode.component';
 import { FlashLog } from '../../../model/flashlog';
 import { FlashLogPlayback } from '../../../model/flashlogplayback';
 import { FlasherComponent } from '../../flasher/flasher.component';

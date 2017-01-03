@@ -9,7 +9,7 @@ import {
     ViewChild 
 } from '@angular/core';
 
-import { ExpressionNodeComponent, EXPRESSION_NODE_COMPONENT } from '../../../expressionnodes/expressionnode.component';
+import { ExpressionNodeComponent, EXPRESSION_NODE_COMPONENT } from '../expressionnode.component';
 import { CompoundExpressionComponent } from '../compoundexpressionnode/compoundexpressionnode.component';
 import { CompoundExpression, NumberExpression, Expression } from '../../../expression';
 
