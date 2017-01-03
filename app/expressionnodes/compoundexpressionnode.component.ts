@@ -16,7 +16,7 @@ import { ExpressionNodeComponent, EXPRESSION_NODE_COMPONENT } from './expression
 import { FlashLog } from '../model/flashlog';
 import { FlashLogPlayback } from '../model/flashlogplayback';
 import { CompoundExpression, Expression, NumberExpression, Operator } from '../expression';
-import { FlasherComponent } from '../view/flasher.component';
+import { FlasherComponent } from '../view/flasher/flasher.component';
 import { ExpressionChanged, NgOnChangesCalled, NgAfterViewChecked } from '../view/flashlogentries';
 
 @Component({

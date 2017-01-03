@@ -2,10 +2,6 @@ import { Color, Flasher } from '../model/flasher';
 import { FlashLogEntry } from '../model/flashlog';
 import { Expression } from '../expression';
 
-/*[LifecycleHook.NG_ON_CHANGES, {r: 153, g: 255, b: 0}],
-[LifecycleHook.NG_DO_CHECK, {r: 77, g: 77, b: 255}],
-[LifecycleHook.NG_AFTER_VIEW_CHECKED, {r: 221, g: 0, b: 72}],*/
-
 export class NgOnChangesCalled implements FlashLogEntry {
     readonly color: Color = {r: 153, g: 255, b: 0};
     readonly message: string = 'ngOnChanges called'

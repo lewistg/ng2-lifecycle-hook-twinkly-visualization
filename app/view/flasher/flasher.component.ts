@@ -1,40 +1,13 @@
 import { AfterViewInit, Component, ElementRef, NgZone, ViewChild } from '@angular/core';
 
-import { CanvasFlasher } from '../model/canvasflasher';
-import { Color, Flasher } from '../model/flasher';
+import { CanvasFlasher } from '../../model/canvasflasher';
+import { Color, Flasher } from '../../model/flasher';
 
 @Component({
+    moduleId: module.id,
     selector: 'ng-lifecylce-hook-flasher',
-    template: `
-        <div class="node">
-            <canvas #flashCanvas width="50" height="50"></canvas>
-            <div class="content-wrapper">
-                <ng-content></ng-content>
-            </div>
-        </div>
-    `,
-    styles: [`
-        .node {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 38px;
-            height: 38px;
-            border-radius: 19px;
-            border: solid 1px black;
-            overflow: hidden;
-        }
-        .node canvas {
-            position: absolute;
-            left: -5px;
-            top: -5px;
-            pointer-events: none;
-        }
-        .content-wrapper {
-            position: relative;
-        }
-    `]
+    templateUrl: 'flasher.component.html',
+    styleUrls: ['flasher.component.css']
 })
 export class FlasherComponent implements AfterViewInit, Flasher {
     @ViewChild('flashCanvas') flashCanvas: ElementRef;
