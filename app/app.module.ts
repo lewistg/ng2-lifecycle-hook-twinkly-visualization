@@ -9,9 +9,9 @@ import { FlasherComponent } from './view/flasher/flasher.component';
 import { CompoundExpressionComponent } from './view/expressionnodes/compoundexpressionnode/compoundexpressionnode.component';
 import { ConnectorComponent } from './view/connector/connector.component';
 import { LogPlaybackControlsComponent }  from './view/logplaybackcontrols/logplaybackcontrols.component';
-import { LogMessagesPlaybackComponent } from './view/logplaybackcontrols/logmessages.component';
+import { LogMessagesPlaybackComponent } from './view/logplaybackcontrols/logmessages/logmessages.component';
 import { NumberExpressionNodeComponent } from './view/expressionnodes/numberexpressionnode/numberexpressionnode.component'
-import { SliderComponent } from './view/logplaybackcontrols/slider.component';
+import { LogPlaybackSliderComponent } from './view/logplaybackcontrols/logplaybackslider/logplaybackslider.component';
 
 @NgModule({
   imports:      [ BrowserModule, FormsModule ],
@@ -25,7 +25,7 @@ import { SliderComponent } from './view/logplaybackcontrols/slider.component';
         LogPlaybackControlsComponent,
         LogMessagesPlaybackComponent,
         NumberExpressionNodeComponent,
-        SliderComponent,
+        LogPlaybackSliderComponent,
   ],
   bootstrap:    [ AppComponent ]
 })
