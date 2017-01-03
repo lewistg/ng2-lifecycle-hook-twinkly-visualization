@@ -1,30 +1,12 @@
 import { Component, ElementRef, Input } from '@angular/core';
 
-import { DOMLineSegment, DOMLocation } from './domgeometry';
+import { DOMLineSegment, DOMLocation } from '../../domgeometry';
 
 @Component({
+    moduleId: module.id,
     selector: 'connector',
-    template: `
-        <svg
-            [style.left.px]="x0"
-            [style.top.px]="y0"
-            [attr.width]="width"
-            [attr.height]="height"
-        >
-            <line
-                [attr.x1]="x1"
-                [attr.y1]="y1"
-                [attr.x2]="x2"
-                [attr.y2]="y2"
-                style="stroke:rgb(0, 0, 0); stroke-width:1"
-            ></line>
-        </svg>
-    `,
-    styles: [`
-        svg {
-            position: absolute;
-        }
-    `]
+    templateUrl: 'connector.component.html',
+    styleUrls: ['connector.component.css']
 })
 export class ConnectorComponent {
     private _padding: number = 10;
