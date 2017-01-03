@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input } from '@angular/core';
 
-import { DOMLineSegment, DOMLocation } from '../../domgeometry';
+import { DOMLineSegment, DOMLocation } from '../../model/domgeometry';
 
 @Component({
     moduleId: module.id,

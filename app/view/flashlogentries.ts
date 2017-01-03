@@ -1,6 +1,6 @@
 import { Color, Flasher } from '../model/flasher';
 import { FlashLogEntry } from '../model/flashlog';
-import { Expression } from '../expression';
+import { Expression } from '../model/expression';
 
 export class NgOnChangesCalled implements FlashLogEntry {
     readonly color: Color = {r: 153, g: 255, b: 0};

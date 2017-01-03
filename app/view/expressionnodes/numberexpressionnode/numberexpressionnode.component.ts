@@ -10,7 +10,7 @@ import {
     ViewChild,
 } from '@angular/core';
 
-import { Expression, NumberExpression } from '../../../expression';
+import { Expression, NumberExpression } from '../../../model/expression';
 import { ExpressionNodeComponent, EXPRESSION_NODE_COMPONENT } from '../expressionnode.component';
 import { FlashLog } from '../../../model/flashlog';
 import { FlashLogPlayback } from '../../../model/flashlogplayback';

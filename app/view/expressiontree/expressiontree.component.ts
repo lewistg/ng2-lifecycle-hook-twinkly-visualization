@@ -10,10 +10,10 @@ import {
     QueryList 
 } from '@angular/core';
 
-import { Expression, CompoundExpression, NumberExpression, Operator } from '../../expression';
+import { Expression, CompoundExpression, NumberExpression, Operator } from '../../model/expression';
 import { ExpressionNodeComponent, EXPRESSION_NODE_COMPONENT } from '../expressionnodes/expressionnode.component';
 import { GenericExpressionNodeComponent } from '../expressionnodes/genericexpressionnode/genericexpressionnode.component';
-import { DOMLineSegment, getClientRectLocation, subtract as subDOMLocations } from '../../domgeometry';
+import { DOMLineSegment, getClientRectLocation, subtract as subDOMLocations } from '../../model/domgeometry';
 
 @Component({
     moduleId: module.id,
