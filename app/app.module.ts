@@ -10,7 +10,7 @@ import { CompoundExpressionComponent } from './view/expressionnodes/compoundexpr
 import { ConnectorComponent } from './connector.component';
 import { LogPlaybackControlsComponent }  from './view/logplaybackcontrols/logplaybackcontrols.component';
 import { LogMessagesPlaybackComponent } from './view/logplaybackcontrols/logmessages.component';
-import { NumberExpressionNodeComponent } from './expressionnodes/numberexpressionnode.component'
+import { NumberExpressionNodeComponent } from './view/expressionnodes/numberexpressionnode/numberexpressionnode.component'
 import { SliderComponent } from './view/logplaybackcontrols/slider.component';
 
 @NgModule({

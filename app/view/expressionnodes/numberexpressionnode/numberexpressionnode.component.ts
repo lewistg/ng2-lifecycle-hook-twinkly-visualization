@@ -10,35 +10,17 @@ import {
     ViewChild,
 } from '@angular/core';
 
-import { Expression, NumberExpression } from '../expression';
-import { ExpressionNodeComponent, EXPRESSION_NODE_COMPONENT } from './expressionnode.component';
-import { FlashLog } from '../model/flashlog';
-import { FlashLogPlayback } from '../model/flashlogplayback';
-import { FlasherComponent } from '../view/flasher/flasher.component';
-import { NgOnChangesCalled, NgAfterViewChecked } from '../view/flashlogentries';
+import { Expression, NumberExpression } from '../../../expression';
+import { ExpressionNodeComponent, EXPRESSION_NODE_COMPONENT } from '../../../expressionnodes/expressionnode.component';
+import { FlashLog } from '../../../model/flashlog';
+import { FlashLogPlayback } from '../../../model/flashlogplayback';
+import { FlasherComponent } from '../../flasher/flasher.component';
+import { NgOnChangesCalled, NgAfterViewChecked } from '../../flashlogentries';
 
 @Component({
+    moduleId: module.id,
     selector: 'number-expression-node',
-    template:  `
-        <template #nodeDivTemplate>
-            <ng-lifecylce-hook-flasher #nodeElementRef>
-                <div #nodeDiv>
-                    <select [(ngModel)]="value">
-                        <option>0</option>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                        <option>6</option>
-                        <option>7</option>
-                        <option>8</option>
-                        <option>9</option>
-                    </select>
-                </div>
-            </ng-lifecylce-hook-flasher>
-        </template>
-    `,
+    templateUrl: 'numberexpressionnode.component.html',
     providers: [{provide: EXPRESSION_NODE_COMPONENT, useExisting: NumberExpressionNodeComponent}],
     styles: [`
         select {
