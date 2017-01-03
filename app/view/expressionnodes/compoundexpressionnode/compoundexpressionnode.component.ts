@@ -12,55 +12,18 @@ import {
     ViewChildren 
 } from '@angular/core';
 
-import { ExpressionNodeComponent, EXPRESSION_NODE_COMPONENT } from './expressionnode.component';
-import { FlashLog } from '../model/flashlog';
-import { FlashLogPlayback } from '../model/flashlogplayback';
-import { CompoundExpression, Expression, NumberExpression, Operator } from '../expression';
-import { FlasherComponent } from '../view/flasher/flasher.component';
-import { ExpressionChanged, NgOnChangesCalled, NgAfterViewChecked } from '../view/flashlogentries';
+import { ExpressionNodeComponent, EXPRESSION_NODE_COMPONENT } from '../../../expressionnodes/expressionnode.component';
+import { FlashLog } from '../../../model/flashlog';
+import { FlashLogPlayback } from '../../../model/flashlogplayback';
+import { CompoundExpression, Expression, NumberExpression, Operator } from '../../../expression';
+import { FlasherComponent } from '../../flasher/flasher.component';
+import { ExpressionChanged, NgOnChangesCalled, NgAfterViewChecked } from '../../flashlogentries';
 
 @Component({
+    moduleId: module.id,
     selector: 'compound-expression-node',
-    template: `
-        <template #nodeDivTemplate>
-            <div class="node-wrapper">
-                <div class="expression-value">{{expression.value}}</div>
-                <ng-lifecylce-hook-flasher #nodeElementRef>
-                    <select [(ngModel)]="operator">
-                       <option value="{{operators.ADD}}">+</option>
-                       <option value="{{operators.SUBTRACT}}">-</option>
-                       <option value="{{operators.MULTIPLY}}">*</option>
-                    </select> 
-                </ng-lifecylce-hook-flasher>
-            </div>
-        </template>
-        <expression-node
-            #leftExpressionNode
-            [(expression)]="leftExpression"
-        ></expression-node>
-        <expression-node
-            #rightExpressionNode
-            [(expression)]="rightExpression"
-        ></expression-node>
-    `,
-    styles: [`
-        .node-wrapper {
-            position: relative;
-        }
-        select {
-            background-color: rgba(255, 255, 255, 0);
-            font-size: 20px;
-            border: none;
-        }
-        .expression-value {
-            font-size: 10px;
-            position: relative;
-            top: 8px;
-            left: 100%;
-            font-family: Arial, sans-serif;
-            color: gray;
-        }
-    `],
+    templateUrl: 'compoundexpressionnode.component.html',
+    styleUrls: ['compoundexpressionnode.component.css'],
     providers: [{provide: EXPRESSION_NODE_COMPONENT, useExisting: CompoundExpressionComponent}]
 })
 export class CompoundExpressionComponent implements AfterViewChecked, ExpressionNodeComponent, OnChanges {

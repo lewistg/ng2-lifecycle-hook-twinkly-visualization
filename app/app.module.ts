@@ -6,7 +6,7 @@ import { AppComponent }  from './app.component';
 import { GenericExpressionNodeComponent } from './view/expressionnodes/genericexpressionnode/genericexpressionnode.component';
 import { ExpressionTreeComponent } from './view/expressiontree/expressiontree.component';
 import { FlasherComponent } from './view/flasher/flasher.component';
-import { CompoundExpressionComponent } from './expressionnodes/compoundexpressionnode.component';
+import { CompoundExpressionComponent } from './view/expressionnodes/compoundexpressionnode/compoundexpressionnode.component';
 import { ConnectorComponent } from './connector.component';
 import { LogPlaybackControlsComponent }  from './view/logplaybackcontrols/logplaybackcontrols.component';
 import { LogMessagesPlaybackComponent } from './view/logplaybackcontrols/logmessages.component';

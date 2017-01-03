@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 
 import { ExpressionNodeComponent, EXPRESSION_NODE_COMPONENT } from '../../../expressionnodes/expressionnode.component';
-import { CompoundExpressionComponent } from '../../../expressionnodes/compoundexpressionnode.component';
+import { CompoundExpressionComponent } from '../compoundexpressionnode/compoundexpressionnode.component';
 import { CompoundExpression, NumberExpression, Expression } from '../../../expression';
 
 @Component({
